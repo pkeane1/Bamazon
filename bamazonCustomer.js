@@ -24,14 +24,16 @@ function displayItem(){
         for(var i = 0;i < res.length;i++) {
         console.log("ID " +res[i].item_ID + " | " + "Product: " + res[i].product_name + " | " + "Department: " + res[i].department_name + " | " + "Price: " + res[i].price + " | " + "QTY: " + res[i].stock_quanity);
         console.log("-----------------------------------------------------------------------------")
+        
         }
+        itemPrompt()
     });
     
 }
 
-displayItem();
 
-function prompt(){
+
+function itemPrompt(){
     inquirer.prompt([
         {
             name: "ID",
@@ -45,4 +47,9 @@ function prompt(){
             message:"How many items do you wish to purchase?",
             filter:Number
         },
+    ]).then(function(answers){
+        
+});
 }
+
+displayItem();
