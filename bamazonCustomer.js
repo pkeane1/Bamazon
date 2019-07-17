@@ -48,8 +48,29 @@ function itemPrompt(){
             filter:Number
         },
     ]).then(function(answers){
-        
+        var idInput = answers.ID;
+        var quantityInput = answers.Quantity;
+        checkStore(idInput,quantityInput);
 });
-}
+};
+
+function checkStore(id,quantity){
+    
+    connection.query("Select * FROM products WHERE item_ID = " + id, function(err, res) {
+        if (err) throw err;
+        // if(id !== res[0].item_ID) {
+        //     console.log("Sorry, we couldnt find your item. Please search again")
+        //     itemPrompt()
+        // } 
+        if(quantity <= res[0].stock_quanity || id !== res[0].item_ID) {
+            console.log("Your items are in stock!")
+            console.log("Thank you for purchasing! your total is: " + res[0].price * quantity)
+        } else{
+            console.log("Insufficient quantity! or we couldnt find your item. Check the ID! ")
+            itemPrompt()
+        };
+})//connection.query 
+}//function 
+
 
 displayItem();
