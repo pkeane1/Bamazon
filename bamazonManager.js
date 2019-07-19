@@ -36,3 +36,17 @@ function list(){
     });
 };
 list()
+
+
+function viewProducts(){
+    var query = "select * FROM products";
+    connection.query(query, function(err, res) {
+        if (err) throw err;
+
+        for(var i = 0;i < res.length;i++) {
+        console.log("ID " +res[i].item_ID + " | " + "Product: " + res[i].product_name + " | " + "Department: " + res[i].department_name + " | " + "Price: " + res[i].price + " | " + "QTY: " + res[i].stock_quanity);
+        console.log("-----------------------------------------------------------------------------")
+        
+        }
+    });
+}
