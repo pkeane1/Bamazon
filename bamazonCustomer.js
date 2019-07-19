@@ -1,4 +1,4 @@
-var mysql = require("mysql");
+var mysql = require('mysql');
 var inquirer = require("inquirer");
 
 
@@ -55,8 +55,8 @@ function itemPrompt(){
 };
 
 function checkStore(id,quantity){
-    
-    connection.query("Select * FROM products WHERE item_ID = " + id, function(err, res) {
+    connection.query('Select * FROM products WHERE ?',{item_ID:id}, function(err,res) {
+    // connection.query("Select * FROM products WHERE item_ID = " + id, function(err, res) {
         if (err) throw err;
         // if(id !== res[0].item_ID) {
         //     console.log("Sorry, we couldnt find your item. Please search again")
@@ -65,6 +65,16 @@ function checkStore(id,quantity){
         if(quantity <= res[0].stock_quanity || id !== res[0].item_ID) {
             console.log("Your items are in stock!")
             console.log("Thank you for purchasing! your total is: " + res[0].price * quantity)
+            updatedStock = res[0].stock_quanity - quantity;
+
+            var query = ("UPDATE products SET ? Where ?")
+            connection.query(query, [{
+                stock_quanity:updatedStock
+            },{
+                item_ID:id
+            }]);
+            displayItem();
+            // connection.query("UPDATE products SET stock_quanity = stock_quanity - " + quantity + "WHERE item_ID = " + id);
         } else{
             console.log("Insufficient quantity! or we couldnt find your item. Check the ID! ")
             itemPrompt()
