@@ -59,5 +59,36 @@ function viewInventory(){
 
         for(var i = 0; i<res.length;i++){
             if(res[i].stock_quanity <= 5){
+                console.log("ID " +res[i].item_ID + " | " + "Product: " + res[i].product_name + " | " + "Department: " + res[i].department_name + " | " + "Price: " + res[i].price + " | " + "QTY: " + res[i].stock_quanity);
+                console.log("-----------------------------------------------------------------------------")
+            };
+        };
 
-}
+    });
+};
+
+
+// function addInventory()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function newProduct()
+
+
