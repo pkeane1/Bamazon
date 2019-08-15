@@ -35,7 +35,7 @@ function list(){
         };
     });
 };
-list()
+
 
 
 function viewProducts(){
@@ -68,7 +68,97 @@ function viewInventory(){
 };
 
 
-// function addInventory()
+function addInventory(){
+    console.log('>>>>>>Adding to Inventory<<<<<<');
+  
+    connection.query('SELECT * FROM Products', function(err, res){
+    if(err) throw err;
+    var itemArray = [];
+    //pushes each item into an itemArray
+    for(var i=0; i<res.length; i++){
+      itemArray.push(res[i].product_name);
+    }
+  
+    inquirer.prompt([{
+      type: "list",
+      name: "product",
+      choices: itemArray,
+      message: "Which item would you like to add inventory?"
+    }, {
+      type: "input",
+      name: "qty",
+      message: "How much would you like to add?",
+      validate: function(value){
+        if(isNaN(value) === false){return true;}
+        else{return false;}
+      }
+      }]).then(function(ans){
+        var currentQty;
+        for(var i=0; i<res.length; i++){
+          if(res[i].product_name === ans.product){
+            currentQty = res[i].stock_quanity;
+          }
+        }
+        connection.query('UPDATE Products SET ? WHERE ?', [
+          {stock_quanity: currentQty + parseInt(ans.qty)},
+          {product_name: ans.product}
+          ], function(err, res){
+            if(err) throw err;
+            console.log('The quantity was updated.');
+            list();
+          });
+        })
+    });
+  }
+  
+  //allows manager to add a completely new product to store
+  function newProduct(){
+    inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "product_name",
+        message: "Enter the name of product to add??"
+      },
+      {
+        type: "input",
+        name: "department_name",
+        message: "Enter the department of product to add??"
+      },
+      {
+        type: "input",
+        name: "price",
+        message: "Enter the price of product to add??"
+      },
+      {
+        type: "input",
+        name: "stock_quantity",
+        message: "Enter the quantity of product to add??"
+      }
+    ])
+    .then(function(answer) {
+      if (isNaN(answer.price) || isNaN(answer.stock_quanity)) {
+        console.log("Invalid Input");
+        if (isNaN(answer.price)) console.log("Invalid Price");
+        if (isNaN(answer.stock_quanity)) console.log("Invalid Quantity");
+        list();
+      } else {
+        var newrow = {
+          product_name: answer.product_name,
+          department_name: answer.department_name,
+          price: answer.price,
+          stock_quanity: answer.stock_quanity
+        };
+        var sql = "insert into products set ?";
+        connection.query(sql, newrow, function(err, res) {
+          if (err) throw err;
+          list();
+        });
+      }
+    });
+}
+    
+  list();
 
 
 
@@ -89,6 +179,6 @@ function viewInventory(){
 
 
 
-// function newProduct()
+
 
 

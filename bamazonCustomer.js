@@ -65,9 +65,9 @@ function checkStore(id,quantity){
         if(quantity <= res[0].stock_quanity || id !== res[0].item_ID) {
             console.log("Your items are in stock!")
             console.log("Thank you for purchasing! your total is: " + res[0].price * quantity)
+            
             updatedStock = res[0].stock_quanity - quantity;
-
-            var query = ("UPDATE products SET ? Where ?")
+             var query = ("UPDATE products SET ? Where ?")
             connection.query(query, [{
                 stock_quanity:updatedStock
             },{
